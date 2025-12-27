@@ -1,0 +1,2 @@
+C:\Users\Usuario\.pyenv\pyenv-win\versions //endereço do python
+
