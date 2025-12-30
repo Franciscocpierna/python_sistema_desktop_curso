@@ -18,4 +18,9 @@ print(f"a sere2 é \n{serie2}")
 serie2 = pd.Series(d)
 print(f"a sere2 é \n{serie2}")
 
-
+serie3 = pd.Series([1,2,3,4], ['João', 'Maria', 'Pedro', 'Carlos'])
+print(f'a serie3 \n{serie3}')
+print(serie3['João'])
+print(serie2+ serie3)
+lista2=[1, 2, 3,4]
+print(serie3+lista2) 
