@@ -47,3 +47,58 @@ print(df[df>0])
 print()
 print()
 print(df[df['X'] > 0])
+
+#dados ausentes em pandas
+
+
+
+df = pd.DataFrame({'A':[10 ,20 , np.nan],
+                   'B':[40, np.nan, np.nan],
+                   'C':[70, 80, 90]})
+
+print(df)                   
+
+print(df.dropna(axis=1))
+
+print(df.dropna(axis=0))
+print()
+print(df) 
+print(df.dropna(thresh=2))
+
+print(df.fillna(value = 'correto'))
+print()
+print()
+print(df)
+
+print()
+print(df['A'].fillna(value = df['A'].mean())) #traz a media na coluna A  das 2 linhas e joga na terceira linha
+#GroupBy
+print()
+print()
+print()
+dados= {'Setor': ['Frutas', 'Frutas', 'Bebidas', 'Bebidas', 'Carnes', 'Carnes'],
+        'Vendedores': ['Alice', 'Carlos', 'Aline', 'João', 'Flavia', 'João'],
+        'Venda': [100, 200, 300, 400, 500, 600]}
+
+df = pd.DataFrame(dados)
+print(df)    
+print()
+print(df.groupby('Setor'))
+
+setor = df.groupby('Setor')
+print(setor.min())
+
+print()
+print(setor.mean(numeric_only=True))
+
+print(setor.std(numeric_only=True))
+
+print(setor.max())
+
+print(setor.count())
+
+print(sum(df['Venda'])) 
+
+print(df.info())
+print(df.head())
+print(df.describe())
