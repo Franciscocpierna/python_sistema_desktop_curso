@@ -6,19 +6,19 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>452</width>
-    <height>312</height>
+    <width>415</width>
+    <height>463</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="pushButton">
+   <widget class="QPushButton" name="bt_download">
     <property name="geometry">
      <rect>
       <x>290</x>
-      <y>180</y>
+      <y>348</y>
       <width>75</width>
       <height>24</height>
      </rect>
@@ -31,7 +31,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>40</y>
+      <y>208</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -44,7 +44,7 @@
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>110</y>
+      <y>278</y>
       <width>49</width>
       <height>16</height>
      </rect>
@@ -53,11 +53,11 @@
      <string>Título</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit">
+   <widget class="QLineEdit" name="txt_link">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>40</y>
+      <y>208</y>
       <width>291</width>
       <height>22</height>
      </rect>
@@ -66,21 +66,21 @@
      <string>https://www.youtube.com/watch?v=xCe9wnBjIcs</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="lineEdit_2">
+   <widget class="QLineEdit" name="txt_titulo">
     <property name="geometry">
      <rect>
       <x>90</x>
-      <y>110</y>
+      <y>278</y>
       <width>291</width>
       <height>22</height>
      </rect>
     </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton">
+   <widget class="QRadioButton" name="rb_mp3">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>160</y>
+      <y>328</y>
       <width>61</width>
       <height>16</height>
      </rect>
@@ -88,12 +88,15 @@
     <property name="text">
      <string>mp3</string>
     </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
    </widget>
-   <widget class="QRadioButton" name="radioButton_2">
+   <widget class="QRadioButton" name="rb_mp4">
     <property name="geometry">
      <rect>
       <x>50</x>
-      <y>190</y>
+      <y>358</y>
       <width>61</width>
       <height>20</height>
      </rect>
@@ -102,19 +105,47 @@
      <string>mp4</string>
     </property>
    </widget>
+   <widget class="QLabel" name="label_4">
+    <property name="geometry">
+     <rect>
+      <x>240</x>
+      <y>30</y>
+      <width>161</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>22</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>Download</string>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>label_2</zorder>
+   <zorder>txt_link</zorder>
+   <zorder>txt_titulo</zorder>
+   <zorder>rb_mp3</zorder>
+   <zorder>rb_mp4</zorder>
+   <zorder>label_4</zorder>
+   <zorder>bt_download</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>452</width>
+     <width>415</width>
      <height>22</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
- <resources/>
+ <resources>
+  <include location="youtube.png"/>
+ </resources>
  <connections/>
 </ui>
