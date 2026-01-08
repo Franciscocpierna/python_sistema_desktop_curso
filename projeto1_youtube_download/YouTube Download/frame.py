@@ -7,7 +7,7 @@
 
 
 from PyQt6 import QtCore, QtGui, QtWidgets
-
+import yt_dlp
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -68,7 +68,25 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
+         
+        #### botão download
+        self.bt_download.clicked.connect(self.download) 
+              
+   
+    def download(self):
+            if self.rb_mp4.isChecked()==True:
+                url = self.txt_link.text()    
+                titulo = self.txt_titulo.text()
+                titulo_mp4 = titulo+ '.mp4'
+                #yt_download(url, titulo_mp4)
+                self.baixar_video_compativel(url,titulo_mp4)
+            elif  self.rb_mp3.isChecked()==True:
+                url = self.txt_link.text()  
+                titulo = self.txt_titulo.text()
+                titulo_mp3 = titulo
+                self.baixar_audio_mp3(url, titulo_mp3) 
 
+       #https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "MainWindow"))
@@ -80,6 +98,44 @@ class Ui_MainWindow(object):
         self.rb_mp4.setText(_translate("MainWindow", "mp4"))
         self.label_4.setText(_translate("MainWindow", "Download"))
 
+    def baixar_video_compativel(self,url, nome_arquivo):
+        # Configurações para garantir compatibilidade com Filmes e TV / Media Player
+        ydl_opts = {
+            # 'f' força o formato de vídeo h264 (avc1) e áudio m4a (aac)
+            # Isso garante que o Windows consiga abrir sem precisar de codecs extras
+            'format': 'bestvideo[vcodec^=avc1]+bestaudio[ext=m4a]/best[vcodec^=avc1]/best',
+            'outtmpl': nome_arquivo,
+            'quiet': False,
+            # Garante que o merge dos arquivos resulte em um mp4 real
+            'merge_output_format': 'mp4',
+        }
+
+        try:
+            print(f"Iniciando download compatível: {url}")
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            print(f"\nDownload concluído com sucesso: {nome_arquivo}")
+            print("Este arquivo agora deve abrir no 'Filmes e TV' e 'Media Player'.")
+        except Exception as e:
+            print(f"\nErro no download: {e}")
+    def baixar_audio_mp3(self, url, nome_arquivo):
+        ydl_opts = {
+            'format': 'bestaudio/best',
+            'outtmpl': nome_arquivo.replace('.mp3', ''), # O conversor adiciona a extensão .mp3 depois
+            'postprocessors': [{
+                'key': 'FFmpegExtractAudio',
+                'preferredcodec': 'mp3',
+                'preferredquality': '192', # Qualidade do áudio
+            }],
+        }
+
+        try:
+            print(f"Iniciando download de áudio: {url}")
+            with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                ydl.download([url])
+            print(f"MP3 concluído: {nome_arquivo}")
+        except Exception as e:
+            print(f"Erro ao baixar MP3: {e}")          
 
 if __name__ == "__main__":
     import sys
