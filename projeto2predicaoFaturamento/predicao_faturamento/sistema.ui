@@ -27,16 +27,6 @@
      <string>Arquivo</string>
     </property>
    </widget>
-   <widget class="QTableView" name="tb_faturamaento">
-    <property name="geometry">
-     <rect>
-      <x>30</x>
-      <y>120</y>
-      <width>551</width>
-      <height>361</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QRadioButton" name="rb_desvio">
     <property name="geometry">
      <rect>
@@ -190,7 +180,7 @@
      <string>Total Faturado</string>
     </property>
    </widget>
-   <widget class="QSpinBox" name="spinBox">
+   <widget class="QSpinBox" name="sb_colunas">
     <property name="geometry">
      <rect>
       <x>580</x>
@@ -218,6 +208,31 @@
     <property name="text">
      <string>Tipo de predição</string>
     </property>
+   </widget>
+   <widget class="QTableWidget" name="tb_faturamento">
+    <property name="geometry">
+     <rect>
+      <x>25</x>
+      <y>111</y>
+      <width>521</width>
+      <height>381</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>Ano</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Mes</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Faturamento</string>
+     </property>
+    </column>
    </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
