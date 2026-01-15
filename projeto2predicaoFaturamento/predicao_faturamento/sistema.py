@@ -11,7 +11,7 @@
 from PyQt6 import QtWidgets
 from PyQt6 import QtCore, QtGui, QtWidgets
 from PyQt6.QtWidgets import QMainWindow, QApplication, QTableWidget, QTableWidgetItem, QPushButton, QVBoxLayout, QWidget
-#import tkinter as Tk
+
 import tkinter as tk
 from tkinter.filedialog import askopenfilename 
 
@@ -48,15 +48,15 @@ class Ui_MainWindow(object):
         self.rb_ponderada = QtWidgets.QRadioButton(parent=self.centralwidget)
         self.rb_ponderada.setGeometry(QtCore.QRect(591, 276, 116, 20))
         self.rb_ponderada.setObjectName("rb_ponderada")
-        self.RegracaoLinear = QtWidgets.QRadioButton(parent=self.centralwidget)
-        self.RegracaoLinear.setGeometry(QtCore.QRect(591, 390, 107, 20))
-        self.RegracaoLinear.setObjectName("RegracaoLinear")
+        self.rb_RegrecaoLinear = QtWidgets.QRadioButton(parent=self.centralwidget)
+        self.rb_RegrecaoLinear.setGeometry(QtCore.QRect(591, 390, 107, 20))
+        self.rb_RegrecaoLinear.setObjectName("rb_RegrecaoLinear")
         self.bt_predizer = QtWidgets.QPushButton(parent=self.centralwidget)
         self.bt_predizer.setGeometry(QtCore.QRect(590, 500, 101, 51))
         self.bt_predizer.setObjectName("bt_predizer")
-        self.txt_previsao = QtWidgets.QLineEdit(parent=self.centralwidget)
-        self.txt_previsao.setGeometry(QtCore.QRect(30, 510, 551, 22))
-        self.txt_previsao.setObjectName("txt_previsao")
+        self.txt_predicao = QtWidgets.QLineEdit(parent=self.centralwidget)
+        self.txt_predicao.setGeometry(QtCore.QRect(30, 510, 551, 22))
+        self.txt_predicao.setObjectName("txt_predicao")
         self.lb_PredicaoFaturamento = QtWidgets.QLabel(parent=self.centralwidget)
         self.lb_PredicaoFaturamento.setGeometry(QtCore.QRect(10, 50, 401, 51))
         font = QtGui.QFont()
@@ -115,7 +115,7 @@ class Ui_MainWindow(object):
         self.rb_temporais.setText(_translate("MainWindow", "Series Temporais"))
         self.rb_media.setText(_translate("MainWindow", "  Média"))
         self.rb_ponderada.setText(_translate("MainWindow", "Média Ponderada"))
-        self.RegracaoLinear.setText(_translate("MainWindow", "Regreção Linear"))
+        self.rb_RegrecaoLinear.setText(_translate("MainWindow", "Regreção Linear"))
         self.bt_predizer.setText(_translate("MainWindow", "Predizer"))
         self.lb_PredicaoFaturamento.setText(_translate("MainWindow", "Predição de faturamento"))
         self.lb_totalFaturado.setText(_translate("MainWindow", "Total Faturado"))
@@ -128,10 +128,10 @@ class Ui_MainWindow(object):
         item.setText(_translate("MainWindow", "Faturamento"))
 
         self.bt_arquivo.clicked.connect(self.openFile)
-        #self.bt_predizer.clicked.connect(self.predicao)
+        self.bt_predizer.clicked.connect(self.predicao)
     def openFile(self):
         
-        tk.Tk().withdraw()
+        #tk.Tk().withdraw()
         path = askopenfilename()
         self.all_data = pd.read_csv(path)
 
@@ -154,7 +154,51 @@ class Ui_MainWindow(object):
         soma_faturamento = str('R$%0.02f' %sum(self.all_data['Faturamento']))
         self.txt_totalfaturado.setText(soma_faturamento)
 
-                
+    def predicao(self):
+        df = self.all_data
+        ##media##
+        if self.rb_media.isChecked():
+            media = df["Faturamento"].mean()
+            predicao = 'Nos próximos meses será faturado R$ '+ str('%0.02f' %media) + '/mes em media.'
+            self.txt_predicao.setText(predicao)
+
+        elif  self.rb_desvioPadrao.isChecked():
+            media = df["Faturamento"].mean()
+            devpad = df["Faturamento"].std()
+            coe_var = (devpad / media)*100
+            predicao = 'predição de R$ '+ str('%0.02f' %media) + '/mes podendo variar em torno de '+str('%0.02f' %coe_var)+'%'
+            self.txt_predicao.setText(predicao)
+        elif self.rb_ponderada.isChecked():
+            lista = np.transpose((np.array([df['Faturamento'].tail(), np.arange(1,6)])))
+            pesos = np.arange(1,6)
+            df_ult = pd.DataFrame(lista, columns = ['Ultimos', 'Pesos'])
+            df_ult['Ponderado'] = df_ult['Ultimos'] * df_ult['Pesos']
+            med_pond = df_ult['Ponderado'].sum() / df_ult['Pesos'].sum()
+            predicao = 'Predição ponderada de R$ ' + str('%0.02f' %med_pond) + ' para os próximos meses.'
+            self.txt_predicao.setText(predicao) 
+         ### Segregação dos Dados ###
+        elif self.rb_segregacao.isChecked():
+            df_janeiro = df.loc[df['Mes'] == 1]
+            med_seg = df_janeiro['Faturamento'].mean()
+            predicao = 'Predição segregada de R$ ' + str('%0.02f' %med_seg) + ' para janeiro.'
+            self.txt_predicao.setText(predicao)
+        ### Regressão Linear ###
+        elif self.rb_RegrecaoLinear.isChecked():
+            coefficients = np.polyfit(df.index, df['Faturamento'], 1)
+            a = coefficients[0]
+            b = coefficients[1]
+            jan_reta = a * 36 + b
+            predicao = 'Predição por regressão de R$ ' + str('%0.02f' %jan_reta) + ' para janeiro.'
+            self.txt_predicao.setText(predicao)
+        ### Series temporais ###
+        elif self.rb_temporais.isChecked() == True:
+            model = AutoReg(df['Faturamento'], lags=1, old_names=True) #old_names só foi utilizado por conta de um aviso da próxima versão
+            model_fit = model.fit()
+            yhat = model_fit.predict(len(df['Faturamento']), len(df['Faturamento'])+2)
+            pred = np.array(yhat)
+            predicao = 'Predição por serie temporal de R$ ' + str('%0.02f' %pred[0]) + ' para janeiro e R$ ' + str('%0.02f' %pred[1]) + ' para fevereiro.'
+            self.txt_predicao.setText(predicao)    
+
 
 if __name__ == "__main__":
     #import sys
