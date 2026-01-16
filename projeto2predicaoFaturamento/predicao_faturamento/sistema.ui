@@ -95,7 +95,7 @@
      <string>Média Ponderada</string>
     </property>
    </widget>
-   <widget class="QRadioButton" name="RegracaoLinear">
+   <widget class="QRadioButton" name="rb_RegracaoLinear">
     <property name="geometry">
      <rect>
       <x>591</x>
@@ -121,7 +121,7 @@
      <string>Predizer</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="txt_previsao">
+   <widget class="QLineEdit" name="txt_predicao">
     <property name="geometry">
      <rect>
       <x>30</x>
