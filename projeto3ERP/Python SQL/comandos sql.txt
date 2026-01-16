@@ -1,0 +1,51 @@
+
+
+
+conexao = mysql.connector.connect(
+    host="localhost",
+    user="root",      # Ou o user que criaste
+    password="",      # A tua senha do MySQL
+    database="projeto_erp" # O nome exato que deste no comando CREATE DATABASE
+)
+
+CREATE DATABASE IF NOT EXISTS python;
+**Dica:** Se o sistema der erro de "Table doesn't exist", certifica-te de que o nome da tabela no Python é exatamente `clientes` (ou o nome que definiste no `CREATE TABLE`). O SQL diferencia letras maiúsculas e minúsculas dependendo da configuração do sistema.
+
+CREATE TABLE python.cliente (
+id INT NOT NULL AUTO_INCREMENT,
+nome VARCHAR(50) NOT NULL,
+telefone VARCHAR(50) NULL,
+cidade VARCHAR(50) NULL, -- Removi a vírgula que estava aqui
+PRIMARY KEY (id)         -- A chave primária deve ficar dentro dos parênteses
+);
+
+INSERT INTO cliente (nome, telefone, cidade)
+VALUES ('João Silva', '11999998888', 'São Paulo');
+
+INSERT INTO cliente (nome) 
+VALUES ('Jorge');
+
+INSERT INTO cliente (nome, telefone, cidade) 
+VALUES ('Jorge', NULL, NULL);
+
+cosultar todos   
+select * from cliente
+
+SELECT * FROM cliente WHERE nome = 'Jorge';
+SELECT * FROM cliente WHERE cidade LIKE 'S%'; # traz todos que começam com S
+
+#Alteração
+
+UPDATE cliente
+SET telefone = '11976314168',
+cidade = 'Guarulhos'
+WHERE nome = 'Jorge' #ou id = do jorge
+
+UPDATE cliente
+SET nome ='João Silva', 
+telefone = '11976314168',
+cidade = 'São Paulo'
+WHERE Id = 1 
+
+deletar
+DELETE FROM cliente WHERE id = 1;
