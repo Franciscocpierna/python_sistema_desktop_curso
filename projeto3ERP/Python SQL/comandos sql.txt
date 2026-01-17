@@ -49,3 +49,20 @@ WHERE Id = 1
 
 deletar
 DELETE FROM cliente WHERE id = 1;
+
+criar um campo novo depois da tabela criada
+ALTER TABLE python.cliente ADD COLUMN email VARCHAR(100);
+
+modificar a estrutura de um campo
+ALTER TABLE produtos MODIFY COLUMN preco DECIMAL(10,2) NOT NULL;
+ALTER TABLE clientesMODIFY COLUMN telefone VARCHAR(20);
+
+
+em caso de não acesso vc deve acessar o superusuario 
+root e sua senha que pode ter acesso a tudo
+
+e dar a qualquer usuario acesso 
+GRANT ALL PRIVILEGES ON *.* TO 'pierna'@'localhost' WITH GRANT OPTION;
+FLUSH PRIVILEGES;
+
+MySQL Workbench
