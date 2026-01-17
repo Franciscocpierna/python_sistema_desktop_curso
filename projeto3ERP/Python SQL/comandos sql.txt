@@ -28,6 +28,11 @@ VALUES ('Jorge');
 INSERT INTO cliente (nome, telefone, cidade) 
 VALUES ('Jorge', NULL, NULL);
 
+### Variaveis ###
+cliente = 'jessica'
+telefone = '8789797'
+cidade = 'São Paulo'
+
 sql = "INSERT INTO cliente (Nome, Telefone, Cidade) values (%s,  %s, %s)"
 val = (cliente, telefone, cidade)
 mycursor.execute(sql, val)
@@ -50,6 +55,18 @@ SET nome ='João Silva',
 telefone = '11976314168',
 cidade = 'São Paulo'
 WHERE IdCliente = 1 
+
+### Variaveis ###
+cidade = 'Rio de Janeiro'
+idCliente = '2'
+
+### UPDATE TABELA ###
+print('UPDATE CLIENTE')
+sql = "UPDATE cliente SET Cidade = %s WHERE  IdCliente = %s"
+val = (cidade, idCliente)
+mycursor.execute(sql, val)
+
+
 
 deletar
 DELETE FROM cliente WHERE IdCliente = 1;
