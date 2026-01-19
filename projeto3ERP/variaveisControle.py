@@ -7,6 +7,6 @@ idConsulta = ''
 
 ### Conexão com banco de dados ###
 host = 'localhost'
-user = 'vitor'
-password = '2802'
+user = 'pierna'
+password = 'pierna'
 database = 'python'
