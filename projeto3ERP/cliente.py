@@ -223,7 +223,14 @@ class Ui_formCliente(object):
         # ID cliente para consulta #
         line = self.tb_cliente.currentRow()
         item = self.tb_cliente.item(line, 0)
-        variaveisControle.idConsulta = item.text()
+        if item is None:
+            # Se não houver item selecionado, avisamos o usuário e paramos a função
+            print("Aviso: Por favor, selecione um cliente na tabela primeiro.")
+            # Se estiver usando QMessageBox, pode exibir um alerta visual:
+            # QMessageBox.warning(self, "Atenção", "Selecione um cliente para alterar.")
+            return 
+        else:    
+            variaveisControle.idConsulta = item.text()
         print('idConsulta: ', variaveisControle.idConsulta)
         # Abertura da tela consultarCliente #
         self.formDadosCliente = QtWidgets.QWidget()
