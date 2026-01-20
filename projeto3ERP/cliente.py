@@ -229,8 +229,13 @@ class Ui_formCliente(object):
             # Se estiver usando QMessageBox, pode exibir um alerta visual:
             # QMessageBox.warning(self, "Atenção", "Selecione um cliente para alterar.")
             return 
-        else:    
+            
+        # Agora o código abaixo é seguro, pois 'item' não é mais None
+        try:
             variaveisControle.idConsulta = item.text()
+        # Restante do seu código para abrir a janela de edição...
+        except Exception as e:
+            print(f"Erro ao capturar ID: {e}")
         print('idConsulta: ', variaveisControle.idConsulta)
         # Abertura da tela consultarCliente #
         self.formDadosCliente = QtWidgets.QWidget()
