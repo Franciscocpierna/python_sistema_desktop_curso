@@ -143,7 +143,106 @@ class Ui_MainWindow(object):
             # Mostrar frames
             print('Resized dimension: ', resized.shape)
             self.lb_video1.setPixmap(self.pixmap)
-            cv2.imshow('frame', frame)
+            #self.lb_video2.setPixmap(self.pixmap)
+            #cv2.imshow('frame', frame)
+            
+            ### EFEITOS
+            
+            
+            ### SEM EFEITOS
+            if self.rb_semEfeito.isChecked():
+                height, width, channel = resized.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(resized.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                print('Resized dimension: ', resized.shape)
+                self.lb_video2.setPixmap(self.pixmap)
+            elif self.rb_bilateral.isChecked():
+                blur = cv2.bilateralFilter(resized, 9, 75, 75)    
+                height, width, channel = blur.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(blur.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                #print('Resized dimension: ', resized.shape)
+                self.lb_video2.setPixmap(self.pixmap)
+            elif self.rb_oil.isChecked():
+                res = cv2.xphoto.oilPainting(resized, 7, 1) 
+                height, width, channel = res.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(res.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                self.lb_video2.setPixmap(self.pixmap) 
+            elif self.rb_cartoom.isChecked():    
+                #converter a image para gray-scale
+                gray = cv2.cvtColor(resized, cv2.COLOR_BGR2GRAY)
+                img = cv2.medianBlur(resized, 1) 
+                #
+                edges = cv2.adaptiveThreshold(gray, 255, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY, 9, 9) 
+                color = cv2.bilateralFilter(img, 9, 200, 200)
+                #
+                cartoon = cv2.bitwise_and(color, color, mask = edges) 
+
+                height, width, channel = cartoon.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(cartoon.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                print('Resized dimension: ', resized.shape)
+                self.lb_video2.setPixmap(self.pixmap)
+            elif self.rb_colored.isChecked():    
+                dst_gray, dst_color = cv2.pencilSketch(resized, sigma_s=60, sigma_r=0.07, shade_factor=0.05)
+                height, width, channel = dst_color.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(dst_color.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                print('Resized dimension: ', resized.shape)
+                self.lb_video2.setPixmap(self.pixmap) 
+
+                ## only Blue Filter   
+            elif self.rb_onlyBlue.isChecked():    
+                ## 
+                lower = np.array([1, 125, 0])
+                upper = np.array([21, 255, 255])
+                
+                hsv = cv2.cvtColor(resized, cv2.COLOR_RGB2HSV)
+                
+                #criar mascara
+                mask = cv2.inRange(hsv, lower, upper)   
+                #
+                onlyBlue = cv2.bitwise_and(resized, resized, mask = mask)
+                # Encontrar contornos
+                contours, hierarchy = cv2.findContours(mask, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+                # LOOP DOS CONTORNOS
+                for contour in contours:
+                    rect = cv2.boundingRect(contour)
+                    area = rect[2] * rect[3]
+                    if area > 1000:
+                        contArea = 0
+                        print('objeto azul detectado')
+                        cv2.drawContours(onlyBlue, contour, -1, (0,150,0), 3) 
+                    if area < 1000 &  contArea > 20:
+                        print('objeto não detectado')
+                        contArea = 0
+                    contArea+=1
+                    print(f'contarea = {contArea}')    
+                height, width, channel = onlyBlue.shape
+                bytesPerLine = 3 * width
+                qImg = QImage(onlyBlue.data, width, height, bytesPerLine, QImage.Format_RGB888).rgbSwapped()
+                # loading image
+                self.pixmap = QPixmap(qImg)
+                # Mostrar frames
+                print('Resized dimension: ', resized.shape)
+                self.lb_video2.setPixmap(self.pixmap)    
+                
 
             # Recupera botão pressionado
             key = cv2.waitKey(1)
